@@ -1,0 +1,54 @@
+{
+  "name": "Green Signal - Phishing Intelligence Challenge [STARTER]",
+  "description": "Build an agent to classify phishing emails. Start here - fetch the emails and build your classification logic!",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ],
+      "id": "start-node",
+      "name": "Start Here"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/challenges/green-signal",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        300
+      ],
+      "id": "fetch-emails",
+      "name": "Fetch Emails from API"
+    }
+  ],
+  "connections": {
+    "Start Here": {
+      "main": [
+        [
+          {
+            "node": "Fetch Emails from API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": [
+    "ctf",
+    "phishing-detection",
+    "starter"
+  ]
+}

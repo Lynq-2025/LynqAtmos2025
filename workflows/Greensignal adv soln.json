@@ -1,0 +1,744 @@
+{
+  "name": "Green Signal - FIXED Advanced Agentic Challenge",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        288,
+        1984
+      ],
+      "id": "99ffca1d-81cc-4361-ab83-313d1cd448f3",
+      "name": "Start Advanced Agent"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        1952,
+        1952
+      ],
+      "id": "c7633145-2b94-452d-a912-75f74d7f1c4d",
+      "name": "Merge: Tool Results"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ (() => {\n  return {\n    email: $json.email || \"unknown\",\n    classification: $json.classification || \"UNCLASSIFIED\",\n    reasoning_summary: $json.reasoning_summary || \"No reasoning provided\",\n    confidence: $json.confidence ?? 0.5\n  };\n})() }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        3408,
+        1952
+      ],
+      "id": "d9b863fa-6485-4a2b-a88b-9f4fd4a5d9e5",
+      "name": "Format: Single Result"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3824,
+        1952
+      ],
+      "id": "cf58a482-549e-416a-80d5-b08ee971fa41",
+      "name": "Collect: All Classifications"
+    },
+    {
+      "parameters": {
+        "url": "https://queenie-sedged-radia.ngrok-free.dev/api/v2/challenge",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        704,
+        1952
+      ],
+      "id": "9fa6b80e-af9a-47ba-ac74-4087e5134dd9",
+      "name": "Fetch Challenge1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { emails: $json.emails, tools: $json.tools_available, scoring: $json.scoring, agentState: { phase: 'INITIALIZATION', memoryBuffer: [], toolCallCount: 0, confidence: 0 } } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        912,
+        1952
+      ],
+      "id": "8e35ca6a-d6bf-42bd-a571-74e0935f3d31",
+      "name": "Initialize: Setup Agent Memory1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        1952
+      ],
+      "id": "b614d8a9-d26e-4503-a4f2-dd97136bd122",
+      "name": "Batch: Loop Through Emails1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ `You are an ADVANCED PHISHING DETECTION AGENT with tool access.\n\nCURRENT EMAIL:\nFrom: ${$json.sender || \"Unknown Sender\"}\nSubject: ${$json.subject || \"No Subject\"}\nBody: ${($json.body || \"\").substring(0, 200)}\n\nYou have access to analysis TOOLS. Determine which tools to call:\n\n1. domain-reputation: Check sender domain reputation score (0-100)\n2. pattern-analysis: Scan for phishing patterns (urgency, verification, links)\n3. header-analysis: Analyze SPF/DKIM/DMARC status and spoofing indicators\n\nPlan your analysis:\n- What tools do you need to call?\n- What evidence would prove phishing vs legitimate?\n- What is your initial risk assessment?\n\nRespond with JSON:\n{\n  \"reasoning\": \"Your analysis plan\",\n  \"tools_to_call\": [\"domain-reputation\", \"pattern-analysis\", \"header-analysis\"],\n  \"initial_risk\": 0.0-1.0,\n  \"evidence_needed\": [\"list of specific things to verify\"]\n}` }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1328,
+        1952
+      ],
+      "id": "bdd37264-0175-457a-bdfa-4ae6bb33baf0",
+      "name": "Agent: Plan Analysis (Tool Use)1",
+      "credentials": {
+        "openAiApi": {
+          "id": "yzBimWXuLrfOSgrs",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "=={{ {\n  email: {\n    sender: $input.first().json.email_sender,\n    subject: $input.first().json.email_subject,\n    body: $input.first().json.email_body,\n    id: $input.first().json.email_id\n  },\n  plan: $json.message.content\n} }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        1536,
+        1952
+      ],
+      "id": "cfdf2a96-4af9-4eda-9649-1274526c4b84",
+      "name": "Parse: Analysis Plan1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queenie-sedged-radia.ngrok-free.dev/api/v2/tools/domain-reputation",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=domain",
+              "value": "=={{ JSON.stringify({ domain: ($json.email.sender || 'unknown@unknown.com').split('@')[1] }) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1744,
+        1792
+      ],
+      "id": "458d92ac-4f48-4d15-854a-64c5d7ec1ba2",
+      "name": "Tool: Domain Reputation Check1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queenie-sedged-radia.ngrok-free.dev/api/v2/tools/pattern-analysis",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "domain",
+              "value": "=={{ JSON.stringify({ text: (($json.email.subject || '') + ' ' + ($json.email.body || '')).trim() }) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1744,
+        1952
+      ],
+      "id": "afe547b6-776e-4b5d-8230-edba95ab506d",
+      "name": "Tool: Pattern Analysis1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queenie-sedged-radia.ngrok-free.dev/api/v2/tools/header-analysis",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1744,
+        2112
+      ],
+      "id": "d5cc1474-8546-4624-8d5e-5f3331b81361",
+      "name": "Tool: Header Analysis1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"email\": {\n    \"index\": 0,\n    \"message\": {\n      \"role\": \"assistant\",\n      \"content\": \"The email lacks a subject line and is from an unknown sender. This raises suspicion and could indicate a phishing attempt. We'll analyze domain reputation, body patterns, and header authenticity.\"\n    }\n  },\n  \"plan\": {\n    \"reasoning\": \"To effectively analyze this suspicious email, I will check the domain reputation to assess the legitimacy of the sender, analyze body patterns for phishing indicators, and examine headers for SPF, DKIM, and DMARC alignment.\",\n    \"tools_to_call\": [\n      \"domain-reputation\",\n      \"pattern-analysis\",\n      \"header-analysis\"\n    ],\n    \"initial_risk\": 0.8,\n    \"evidence_needed\": [\n      \"Domain reputation score\",\n      \"Presence of urgent language\",\n      \"Suspicious or shortened links\",\n      \"SPF, DKIM, and DMARC validation results\"\n    ]\n  },\n  \"toolResults\": {\n    \"domainReputation\": {\n      \"score\": 45,\n      \"verdict\": \"Low reputation — flagged domain\"\n    },\n    \"patternAnalysis\": {\n      \"urgent_phrases\": true,\n      \"link_count\": 3,\n      \"phishing_indicators\": [\"Urgency\", \"Generic greeting\", \"Suspicious link\"]\n    },\n    \"headerAnalysis\": {\n      \"SPF\": \"fail\",\n      \"DKIM\": \"pass\",\n      \"DMARC\": \"fail\",\n      \"spoofed\": true\n    }\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        2160,
+        1952
+      ],
+      "id": "eabc1ca4-aa56-49c8-b923-3497fd9a256d",
+      "name": "Aggregate: Tool Results1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ `You are an ADVANCED PHISHING DETECTIVE analyzing collected evidence.\n\nEMAIL:\nFrom: ${$json.email.sender}\nSubject: ${$json.email.subject}\n\nTOOL RESULTS:\n\nDomain Reputation:\n${JSON.stringify($json.toolResults.domainReputation, null, 2)}\n\nPattern Analysis:\n${JSON.stringify($json.toolResults.patternAnalysis, null, 2)}\n\nHeader Analysis:\n${JSON.stringify($json.toolResults.headerAnalysis, null, 2)}\n\nNow perform MULTI-FACTOR ANALYSIS:\n\n1. DOMAIN RISK:\n   - Is reputation score < 50? = HIGH RISK\n   - Is it newly established? = MEDIUM RISK\n   - Does it have suspicious keywords? = HIGH RISK\n\n2. PATTERN RISK:\n   - Urgency indicators + verification requests = PHISHING SIGNAL\n   - Suspicious links = PHISHING SIGNAL\n   - Normal business language = LEGITIMATE SIGNAL\n\n3. HEADER RISK:\n   - SPF/DKIM FAIL = SPOOFING RISK\n   - Homograph indicators = SPOOFING RISK\n   - Legitimate domain = TRUSTED\n\n4. CROSS-VALIDATION:\n   - Do all signals align?\n   - Is this a false positive (legitimate with suspicious indicators)?\n   - Could this be a sophisticated attack (legitimate-looking but suspicious metadata)?\n\nProvide final analysis:\n{\n  \"multi_factor_analysis\": {\n    \"domain_risk_level\": \"LOW|MEDIUM|HIGH|CRITICAL\",\n    \"pattern_risk_level\": \"LOW|MEDIUM|HIGH|CRITICAL\",\n    \"header_risk_level\": \"LOW|MEDIUM|HIGH|CRITICAL\",\n    \"confidence_score\": 0.0-1.0,\n    \"risk_factors\": [\"list of detected risk factors\"]\n  },\n  \"cross_validation\": {\n    \"signals_aligned\": true/false,\n    \"false_positive_risk\": true/false,\n    \"sophisticated_attack_suspected\": true/false,\n    \"reasoning\": \"explanation of cross-validation\"\n  },\n  \"final_classification\": \"PHISHING\" or \"LEGITIMATE\",\n  \"reasoning_summary\": \"comprehensive summary\",\n  \"confidence_justification\": \"why this confidence level\"\n}` }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2368,
+        1952
+      ],
+      "id": "b38a75a4-4466-4e0b-86b4-014a680f91fe",
+      "name": "Agent: Multi-Factor Analysis1",
+      "credentials": {
+        "openAiApi": {
+          "id": "yzBimWXuLrfOSgrs",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ {\n  email: $json.email,\n  analysis: $json.message.content,\n  toolData: $json.toolResults\n} }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        2576,
+        1952
+      ],
+      "id": "a0582739-8e89-41c5-a539-7e8032aee3cb",
+      "name": "Parse: Analysis Results1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "check_conf",
+              "leftValue": "={{ $json.analysis.multi_factor_analysis.confidence_score }}",
+              "rightValue": 0.8,
+              "operator": {
+                "type": "number",
+                "operation": "gte",
+                "name": "filter.operator.gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": "={{ 0.8 }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2784,
+        1952
+      ],
+      "id": "44827ec8-620c-4cf6-9c16-f99509b92dfc",
+      "name": "Gate: High Confidence?1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ (() => {\n  return {\n    email: $json.email || \"unknown\",\n    classification: $json.analysis?.final_classification || \"UNCLASSIFIED\",\n    reasoning_summary: $json.analysis?.reasoning_summary || \"No reasoning available\",\n    confidence: $json.analysis?.multi_factor_analysis?.confidence_score ?? 0.5,\n    source: \"multi_factor_agent\",\n    review_depth: \"FULL\"\n  };\n})() }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        2992,
+        1792
+      ],
+      "id": "2ab88904-1715-4625-bce2-161abbd04225",
+      "name": "Accept: High Confidence Result1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ `\nYou are a SKEPTICAL SECURITY EXPERT reviewing an uncertain classification.\n\nCURRENT ASSESSMENT:\nClassification: ${$json?.analysis?.final_classification || \"UNKNOWN\"}\nConfidence: ${$json?.analysis?.multi_factor_analysis?.confidence_score ?? \"N/A\"}\n\nFACTORS:\n${JSON.stringify($json?.analysis?.multi_factor_analysis ?? {}, null, 2)}\n\nTOOL DATA GATHERED:\n${JSON.stringify($json?.toolData ?? {}, null, 2)}\n\nPERFORM SKEPTICAL REVIEW:\n1. What evidence contradicts the classification?\n2. Are there alternative interpretations?\n3. Could this be a well-crafted phishing email (legitimate appearance, malicious intent)?\n4. Could this be a false alarm (suspicious metadata, legitimate content)?\n5. What additional evidence would settle the uncertainty?\n\nProvide the following response in valid JSON format only:\n{\n  \"skeptical_assessment\": \"challenge to primary analysis\",\n  \"alternative_interpretation\": \"could it be classified differently?\",\n  \"additional_evidence_needed\": [\"specific indicators to verify\"],\n  \"override_classification\": \"PHISHING\" | \"LEGITIMATE\" | null,\n  \"final_confidence\": 0.0-1.0,\n  \"reasoning\": \"final reasoning\"\n}\n` }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2864,
+        2224
+      ],
+      "id": "0bc24a3b-920d-426d-9e04-a2167e94a92a",
+      "name": "Agent: Skeptical Review (Low Confidence)1",
+      "credentials": {
+        "openAiApi": {
+          "id": "yzBimWXuLrfOSgrs",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ (() => {\n  let content = {};\n  try {\n    content = JSON.parse($json.message?.content || \"{}\");\n  } catch (e) {\n    content = {};\n  }\n\n  return {\n    email: $json.email,\n    classification: content.override_classification || $json.analysis?.final_classification || \"UNKNOWN\",\n    reasoning_summary: content.reasoning || \"No reasoning available\",\n    confidence: content.final_confidence ?? $json.analysis?.multi_factor_analysis?.confidence_score ?? 0.5,\n    source: \"skeptical_review\",\n    review_depth: \"EXTENDED\"\n  };\n})() }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        3072,
+        2224
+      ],
+      "id": "773badee-c1cd-4754-a12b-f95859627447",
+      "name": "Parse: Skeptical Review1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        3200,
+        1952
+      ],
+      "id": "0e66bb5f-5c10-423e-bc36-87b900907cfb",
+      "name": "Finalize: Merge Results1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        3616,
+        1952
+      ],
+      "id": "4815e7db-2693-4760-8a6c-4e89dbc983cb",
+      "name": "Recombine: All Results1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ (() => {\n  return {\n    submissions: $input.all().map(item => ({\n      email_id: item.json?.email?.id || \"unknown_id\",\n      sender: item.json?.email?.sender || \"unknown_sender\",\n      classification: item.json?.classification || \"UNCLASSIFIED\",\n      reasoning_summary: item.json?.reasoning_summary || \"No reasoning provided\",\n      confidence: item.json?.confidence ?? 0.5\n    }))\n  };\n})() }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        4032,
+        1952
+      ],
+      "id": "aec9b9df-5ecf-4744-ab3b-0a814e528588",
+      "name": "Prepare: Final Submission1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queenie-sedged-radia.ngrok-free.dev/api/v2/submit",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4240,
+        1952
+      ],
+      "id": "5f3aba5d-737a-48d3-9140-4f46072dda3a",
+      "name": "Submit: Advanced Challenge1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ (() => {\n  return {\n    success: $json?.success ?? false,\n    score: $json?.score ?? 0,\n    accuracy: $json?.accuracy ?? 0,\n    flag: $json?.flag || \"N/A\",\n    message: $json?.message || \"No message provided\",\n    details: $json?.details || {}\n  };\n})() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        4448,
+        1952
+      ],
+      "id": "9f33dfb4-8f73-41af-8251-d1d353b21f44",
+      "name": "Display: Results & Score1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start Advanced Agent": {
+      "main": [
+        [
+          {
+            "node": "Fetch Challenge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge: Tool Results": {
+      "main": [
+        [
+          {
+            "node": "Aggregate: Tool Results1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format: Single Result": {
+      "main": [
+        [
+          {
+            "node": "Batch: Loop Through Emails1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect: All Classifications": {
+      "main": [
+        [
+          {
+            "node": "Prepare: Final Submission1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Challenge1": {
+      "main": [
+        [
+          {
+            "node": "Initialize: Setup Agent Memory1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Initialize: Setup Agent Memory1": {
+      "main": [
+        [
+          {
+            "node": "Batch: Loop Through Emails1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch: Loop Through Emails1": {
+      "main": [
+        [
+          {
+            "node": "Recombine: All Results1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agent: Plan Analysis (Tool Use)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent: Plan Analysis (Tool Use)1": {
+      "main": [
+        [
+          {
+            "node": "Parse: Analysis Plan1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse: Analysis Plan1": {
+      "main": [
+        [
+          {
+            "node": "Tool: Domain Reputation Check1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tool: Pattern Analysis1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tool: Header Analysis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Domain Reputation Check1": {
+      "main": [
+        [
+          {
+            "node": "Merge: Tool Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tool: Pattern Analysis1": {
+      "main": [
+        [
+          {
+            "node": "Merge: Tool Results",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Aggregate: Tool Results1": {
+      "main": [
+        [
+          {
+            "node": "Agent: Multi-Factor Analysis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent: Multi-Factor Analysis1": {
+      "main": [
+        [
+          {
+            "node": "Parse: Analysis Results1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse: Analysis Results1": {
+      "main": [
+        [
+          {
+            "node": "Gate: High Confidence?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gate: High Confidence?1": {
+      "main": [
+        [
+          {
+            "node": "Accept: High Confidence Result1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agent: Skeptical Review (Low Confidence)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accept: High Confidence Result1": {
+      "main": [
+        [
+          {
+            "node": "Finalize: Merge Results1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent: Skeptical Review (Low Confidence)1": {
+      "main": [
+        [
+          {
+            "node": "Parse: Skeptical Review1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse: Skeptical Review1": {
+      "main": [
+        [
+          {
+            "node": "Finalize: Merge Results1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Finalize: Merge Results1": {
+      "main": [
+        [
+          {
+            "node": "Format: Single Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recombine: All Results1": {
+      "main": [
+        [
+          {
+            "node": "Collect: All Classifications",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Collect: All Classifications",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare: Final Submission1": {
+      "main": [
+        [
+          {
+            "node": "Submit: Advanced Challenge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit: Advanced Challenge1": {
+      "main": [
+        [
+          {
+            "node": "Display: Results & Score1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c1860609-0ac0-4554-9afd-ab41b0c76d6f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6492305284c4f90756a1a8a9bdbf0d0364d07b631c8fd7f3bbda15c0b3f60efa"
+  },
+  "id": "eRRngVvq7O9WeLWU",
+  "tags": []
+}

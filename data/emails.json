@@ -1,0 +1,212 @@
+[
+    {
+        "email": {
+            "sender": "sarah.connor@example.com",
+            "subject": "Project Alpha Update - Week 3",
+            "body": "Hi Team,\n\nJust a quick update on Project Alpha. We've hit our milestone for the week, with all components integrated and initial testing underway. I'll be sending out a more detailed report with the latest metrics by EOD tomorrow.\n\nPlease let me know if you have any questions or require further information. Thanks for your continued hard work!"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "support@globalsys.com",
+            "subject": "Important Account Verification Required",
+            "body": "Dear Valued Customer,\n\nWe've detected unusual activity on your account. To prevent unauthorized access, please click the link below to verify your recent transactions and update your security preferences. Failure to do so may result in temporary account suspension within 24 hours.\n\nThank you for your cooperation."
+        },
+        "label": "EDGE"
+    },
+    {
+        "email": {
+            "sender": "sarah.connor@cyberdyne.com",
+            "subject": "Project T-800 Update - Weekly Sync",
+            "body": "Hi team,\n\nJust a reminder that our weekly project sync for the T-800 initiative is scheduled for tomorrow at 10 AM in Conference Room B. Please come prepared to discuss your progress and any blockers you're currently facing. I've attached the latest project roadmap for your reference.\n\nLooking forward to a productive meeting.\n\nBest,\nSarah"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-updates.com",
+            "subject": "Urgent: Your Account Requires Immediate Verification",
+            "body": "Dear Valued Customer,\n\nWe have detected unusual activity on your account. For your security, please verify your login credentials immediately to prevent service interruption. Failure to do so within 24 hours will result in a temporary suspension of your account.\n\nClick here to verify: http://security-portal.login-update.com/verify\n\nThank you for your prompt attention to this matter."
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-update.com",
+            "subject": "Urgent: Your Account Requires Immediate Verification",
+            "body": "Dear Valued User,\n\nWe have detected unusual activity on your account. To prevent unauthorized access and service interruption, you are required to verify your details immediately. Failure to do so within 24 hours will result in permanent account suspension.\n\nPlease click on the link below to verify your account now: http://verify-security-login.com/update\n\nThank you for your prompt attention to this matter.\n\nSincerely,\nSecurity Team"
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-update.com",
+            "subject": "Urgent: Your Account Requires Immediate Verification",
+            "body": "Dear Valued User,\n\nWe have detected unusual activity on your account. To prevent unauthorized access and service interruption, you must verify your details within the next 24 hours.\n\nFailure to do so will result in temporary suspension of your account. Please click the link below to verify immediately:\nhttp://security-login-portal.com/verify-account/user-id=98765"
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "marketing@examplecorp.com",
+            "subject": "Q3 Performance Review & Strategy Session",
+            "body": "Hi Team,\n\nJust a reminder about our upcoming Q3 performance review and strategy session next Tuesday at 10 AM in Conference Room B. Please come prepared to discuss your team's progress and any challenges faced.\n\nWe'll be outlining our objectives for Q4 and beyond, so your input is highly valued. I've attached the preliminary agenda for your review.\n\nBest regards,\nSarah Chen"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "support@securepayments.co",
+            "subject": "Urgent: Payment Processing Update Required",
+            "body": "Dear Valued Customer,\n\nWe've detected an issue with your recent payment processing attempts that requires immediate attention. To avoid service interruption, please click the link below to verify your account details and update your payment information within 24 hours. Failure to do so may result in the suspension of your services.\n\nThank you for your prompt cooperation."
+        },
+        "label": "EDGE"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-update.com",
+            "subject": "URGENT: Your Account Has Been Compromised - Immediate Action Required!",
+            "body": "Dear Valued User,\n\nWe have detected unusual activity on your account. For your security, we have temporarily locked your access. Please verify your identity immediately by clicking on the following link: http://secure-login.data.phish.com/verify. Failure to do so within 24 hours will result in permanent account suspension."
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "marketing@examplecorp.com",
+            "subject": "Q3 Marketing Review - Agenda Attached",
+            "body": "Hi Team,\n\nPlease find the agenda for our Q3 Marketing Review meeting attached. We'll be discussing campaign performance, upcoming initiatives, and budget allocations.\n\nLooking forward to a productive session.\n\nBest regards,\nSarah Chen"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-update.com",
+            "subject": "URGENT: Your Account Has Been Compromised - Immediate Action Required",
+            "body": "Dear Valued User,\n\nWe have detected unusual activity on your account from an unrecognized location. For your security, your account has been temporarily locked to prevent unauthorized access. Please verify your identity immediately by clicking on the link below:\n\nhttp://security-verify.com/login/auth-id=87654321\n\nFailure to verify within 24 hours will result in permanent account suspension. Act now to secure your access."
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-update.com",
+            "subject": "Urgent Security Alert: Your Account Has Been Compromised",
+            "body": "Dear Valued User,\n\nWe have detected unusual activity on your account. For your security, we have temporarily suspended access. Please verify your identity immediately by clicking the link below to prevent permanent account closure. Failure to do so will result in account termination within 24 hours.\n\nVerify Now: http://secure-login.info/verify-account"
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-updates.com",
+            "subject": "Urgent: Your Account Requires Immediate Verification",
+            "body": "Dear Valued User,\n\nWe have detected unusual activity on your account. To prevent unauthorized access and service interruption, you must verify your details within the next 24 hours.\n\nPlease click on the following link to secure your account immediately: http://verify-account.info/login.php\n\nFailure to comply will result in permanent account suspension. Thank you for your prompt attention to this matter."
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "sarah.connor@cyberdyne.com",
+            "subject": "Project T-800 Update - Weekly Sync",
+            "body": "Hi team,\n\nJust a quick reminder about our weekly sync meeting for Project T-800 tomorrow at 10 AM in Conference Room 3. Please come prepared to discuss your progress on the neural network integration and any challenges you've encountered.\n\nI've attached the latest project roadmap for your reference. Let's aim to finalize the testing phase schedule during the meeting.\n\nSee you there,\nSarah"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "support@globalservices.net",
+            "subject": "Important Account Update Required",
+            "body": "Dear Valued Customer,\n\nWe've detected unusual login activity on your account. To ensure the security of your information, please verify your details through our secure portal at your earliest convenience. Failure to do so may result in temporary account restrictions.\n\nThank you for your prompt attention to this matter."
+        },
+        "label": "EDGE"
+    },
+    {
+        "email": {
+            "sender": "marketing@examplecorp.com",
+            "subject": "Q3 Performance Review Meeting",
+            "body": "Hi Team,\n\nJust a reminder that our quarterly performance review meeting is scheduled for next Tuesday, October 24th, at 10:00 AM in Conference Room B. Please come prepared to discuss your department's Q3 achievements and any challenges faced. I've attached the agenda for your reference.\n\nBest regards,\nSarah"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-updates.com",
+            "subject": "URGENT: Your Account Has Been Compromised - Immediate Action Required",
+            "body": "Dear Valued User,\n\nWe have detected unusual activity on your account. For your security, we have temporarily locked access. Please verify your identity immediately by clicking the link below to prevent permanent account suspension: http://account-verify.login.com/secure/update. Failure to act within 12 hours will result in permanent data loss."
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "sarah.connor@cyberdyne.com",
+            "subject": "Project T-800 Update - Weekly Sync",
+            "body": "Hi team,\n\nJust a quick reminder that our weekly Project T-800 sync meeting is scheduled for tomorrow at 10 AM in Conference Room B. Please come prepared to discuss your progress and any blockers you've encountered this week. \n\nI've attached the updated agenda for your review. Let me know if you have any items you'd like to add."
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "support@globalservices.net",
+            "subject": "Important Account Update Required",
+            "body": "Dear Valued Customer,\n\nWe've detected unusual activity on your account. To ensure continued security and access, please review your account details by clicking the link provided in the attached document. This is a standard procedure to maintain the integrity of our systems.\n\nThank you for your cooperation."
+        },
+        "label": "EDGE"
+    },
+    {
+        "email": {
+            "sender": "sarah.connor@example.com",
+            "subject": "Q3 Marketing Report Draft",
+            "body": "Hi John,\n\nI've attached the initial draft of the Q3 marketing report for your review. Please let me know if you have any feedback or require any additions by end of day Friday. We'll be discussing this in more detail during our team meeting next week.\n\nThanks,\nSarah"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "sarah.connor@example.com",
+            "subject": "Project Alpha Update - Week 3",
+            "body": "Hi Team,\n\nJust a quick update on Project Alpha's progress for Week 3. We've successfully integrated the new module and initial testing shows promising results. Please review the attached report for more detailed analytics and next steps.\n\nThanks,\nSarah"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "noreply@security-update.com",
+            "subject": "URGENT: Your Account Has Been Compromised - Immediate Action Required",
+            "body": "Dear Valued User,\n\nWe have detected unusual activity on your account. For your security, we have temporarily suspended access. To reactivate your account and prevent further issues, please verify your details immediately by clicking on the link below:\n\nhttp://security-verification.co/login/verify.php\n\nFailure to do so within 12 hours will result in permanent account deactivation. Thank you for your prompt attention to this matter."
+        },
+        "label": "PHISHING"
+    },
+    {
+        "email": {
+            "sender": "marketing@examplecorp.com",
+            "subject": "Q3 Performance Review Meeting",
+            "body": "Hi Team,\n\nJust a reminder about our Q3 performance review meeting scheduled for this Wednesday at 10 AM in Conference Room B. Please come prepared to discuss your department's key achievements and any challenges encountered.\n\nWe will also be outlining our strategic goals for Q4 during this session. Your input is highly valued.\n\nBest regards,\nSarah Chen"
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "support@securepayments.co",
+            "subject": "Urgent: Payment Processing Update Required",
+            "body": "Dear Valued User,\n\nWe've detected an unusual access pattern on your recent payment transactions. To prevent any service interruption, please click the link below and verify your account details immediately.\n\nFailure to do so within 24 hours may result in a temporary suspension of your payment processing capabilities.\n\nThank you for your prompt attention to this matter."
+        },
+        "label": "EDGE"
+    },
+    {
+        "email": {
+            "email": {
+                "sender": "failed-11@example.com",
+                "subject": "generation_failed_11",
+                "body": "Generation failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google."
+            }
+        },
+        "label": "LEGITIMATE"
+    },
+    {
+        "email": {
+            "sender": "support@securepaymentservices.net",
+            "subject": "Account Activity Review - Urgent",
+            "body": "Dear Valued Customer,\n\nWe've detected unusual activity on your SecurePay account. For your security, please verify recent transactions by logging in through the link below. Failure to do so may result in temporary account suspension.\n\nThank you,\nSecurePay Services Team"
+        },
+        "label": "EDGE"
+    }
+]
